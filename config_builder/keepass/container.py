@@ -7,7 +7,7 @@ class KeePassContainer:
         self.name = name
         self.keepass = PyKeePass(config['db_path'], password=config['db_password'])
 
-    def resolve(self, path):
+    def resolve(self, path, context):
         keepass_path = KeePassEntryPath.parse(path)
 
         group = self.keepass.find_groups(path=keepass_path.group_path) if keepass_path.group_path else None

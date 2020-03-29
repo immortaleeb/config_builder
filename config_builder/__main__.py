@@ -4,6 +4,7 @@ import re
 import os
 
 from .parser import parse
+from .context import ContainerContext
 
 def parse_arguments(argv):
     parser = argparse.ArgumentParser(description='builds config files from templates')
@@ -29,7 +30,9 @@ def load_config(config_file):
 
 def resolve_variable(variable_containers, variable_reference):
     container_instance = variable_containers[variable_reference.container]
-    return container_instance.resolve(variable_reference.path)
+    context = ContainerContext(variable_containers)
+
+    return container_instance.resolve(variable_reference.path, context)
 
 def main(argv=None):
     args = parse_arguments(argv)
