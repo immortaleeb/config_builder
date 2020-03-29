@@ -9,6 +9,7 @@ from .context import ContainerContext
 def parse_arguments(argv):
     parser = argparse.ArgumentParser(description='builds config files from templates')
     parser.add_argument('-t', '--template', dest='template', help='template file', required=True)
+    parser.add_argument('-c', '--config-file', dest='config_file', help='config file in working dir', default='config.py')
 
     return parser.parse_args(argv)
 
@@ -37,7 +38,7 @@ def resolve_variable(variable_containers, variable_reference):
 def main(argv=None):
     args = parse_arguments(argv)
 
-    variable_containers = load_config('config.py')
+    variable_containers = load_config(args.config_file)
 
     with open(args.template) as file:
         variables = parse(file)
