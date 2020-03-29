@@ -1,10 +1,32 @@
-class DictContainer:
+class FixedContainer:
     def __init__(self, name, config):
         self.name = name
         self.config = config
 
     def resolve(self, path, context):
         return self.config[path] if path in self.config else None
+
+class DictContainer:
+    def __init__(self, name, config):
+        self.name = name
+        self.config = config
+
+    def resolve(self, path, context):
+        path_elements = path.split('/')
+
+        index = 0
+        child = self.config
+
+        while index < len(path_elements):
+            path_element = path_elements[index]
+            if len(path_element) > 0:
+                if not path_element in child:
+                    return None
+                else:
+                    child = child[path_element]
+            index = index + 1
+
+        return child
 
 class ProxyContainer:
     def __init__(self, name, config):
