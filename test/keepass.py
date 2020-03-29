@@ -7,7 +7,8 @@ class KeePassEntryTest(unittest.TestCase):
     def test_parse_parses_path_and_attribute(self):
         entry = KeePassEntryPath.parse('My Secrets/Databases/example-postgres/@password')
 
-        self.assertEqual(entry.path, 'My Secrets/Databases/example-postgres')
+        self.assertEqual(entry.group_path, 'My Secrets/Databases')
+        self.assertEqual(entry.title, 'example-postgres')
         self.assertEqual(entry.attribute, 'password')
 
     def test_parses_entry_index(self):
