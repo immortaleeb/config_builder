@@ -3,7 +3,7 @@ import importlib
 import re
 import os
 
-from .parser import parse
+from .parser import parse, compile, VariableBinding
 from .context import ContainerContext
 
 def parse_arguments(argv):
@@ -35,15 +35,28 @@ def resolve_variable(variable_containers, variable_reference):
 
     return container_instance.resolve(variable_reference.path, context)
 
+def resolve_variables(variable_containers, variable_references):
+    bindings = []
+
+    for variable_ref in variable_references:
+        value = resolve_variable(variable_containers, variable_ref)
+        binding = VariableBinding(variable_ref, value)
+
+        bindings.append(binding)
+
+    return bindings
+
 def main(argv=None):
     args = parse_arguments(argv)
 
     variable_containers = load_config(args.config_file)
 
-    with open(args.template) as file:
-        variables = parse(file)
-        for variable in variables:
-            print(variable, resolve_variable(variable_containers, variable))
+    with open(args.template) as template_file:
+        variable_references = parse(template_file)
+        bindings = resolve_variables(variable_containers, variable_references)
+
+        template_file.seek(0)
+        compile(template_file, bindings)
 
 if __name__ == '__main__':
     main()
