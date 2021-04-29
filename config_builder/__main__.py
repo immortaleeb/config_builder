@@ -30,10 +30,13 @@ def load_config(config_file):
     return variable_containers
 
 def resolve_variable(variable_containers, variable_reference):
-    container_instance = variable_containers[variable_reference.container]
-    context = ContainerContext(variable_containers)
+    try :
+        container_instance = variable_containers[variable_reference.container]
+        context = ContainerContext(variable_containers)
 
-    return container_instance.resolve(variable_reference.path, context)
+        return container_instance.resolve(variable_reference.path, context)
+    except e:
+        raise Exception("Error while resolving variable " + variable_reference, e)
 
 def resolve_variables(variable_containers, variable_references):
     bindings = []

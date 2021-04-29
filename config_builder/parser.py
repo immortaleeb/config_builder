@@ -30,8 +30,11 @@ def parse_variables(template_file):
     return all_variables
 
 def parse_variable_reference(variable):
-    match = re.match(VARIABLE_REFERENCE_REGEX, variable)
-    return VariableReference(match.group(1), match.group(2))
+    try:
+        match = re.match(VARIABLE_REFERENCE_REGEX, variable)
+        return VariableReference(match.group(1), match.group(2))
+    except Exception as e:
+        raise Exception("Error while parsing variable " + variable, e)
 
 def parse(template_file):
     variables = parse_variables(template_file)
