@@ -60,5 +60,5 @@ class ProxyContainer:
                 if not longest_match or len(longest_match) < len(binding):
                     longest_match = binding
 
-        return binding
+        return longest_match
 
